@@ -1,0 +1,16 @@
+spring:
+    application:
+        name: ANB
+    datasource:
+        url: jdbc:postgresql://localhost:5432/ANB
+        username: trroooyyyy
+        password: "06062023"
+        driver-class-name: org.postgresql.Driver
+    jpa:
+        hibernate:
+            ddl-auto: update
+        show-sql: true
+
+
+
+
