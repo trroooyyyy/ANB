@@ -1,12 +1,14 @@
 package chnu.edu.anetrebin.anb.model;
 
-import chnu.edu.anetrebin.anb.enums.AccountStatus;
+import chnu.edu.anetrebin.anb.enums.UserStatus;
 import chnu.edu.anetrebin.anb.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -31,8 +33,8 @@ public class User {
     private Role role;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, name = "account_status")
-    private AccountStatus accountStatus;
+    @Column(nullable = false, name = "user_status")
+    private UserStatus userStatus;
 
     @Column(length = 50)
     private String name;
@@ -48,6 +50,9 @@ public class User {
 
     @Column(name = "date_of_birth")
     private LocalDate dateOfBirth;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Account> accounts = new ArrayList<>();
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;

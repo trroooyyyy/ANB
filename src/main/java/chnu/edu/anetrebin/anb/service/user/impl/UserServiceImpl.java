@@ -2,7 +2,7 @@ package chnu.edu.anetrebin.anb.service.user.impl;
 
 import chnu.edu.anetrebin.anb.dto.requests.UserRequest;
 import chnu.edu.anetrebin.anb.dto.responses.UserResponse;
-import chnu.edu.anetrebin.anb.enums.AccountStatus;
+import chnu.edu.anetrebin.anb.enums.UserStatus;
 import chnu.edu.anetrebin.anb.enums.Role;
 import chnu.edu.anetrebin.anb.exception.UserNotFoundException;
 import chnu.edu.anetrebin.anb.exception.UserAlreadyExists;
@@ -40,7 +40,7 @@ public class UserServiceImpl implements UserService {
                 .login(userRequest.login())
                 .password(userRequest.password())
                 .role(Role.CUSTOMER)
-                .accountStatus(AccountStatus.ACTIVE)
+                .userStatus(UserStatus.ACTIVE)
                 .name(userRequest.name())
                 .surname(userRequest.surname())
                 .dateOfBirth(userRequest.dateOfBirth())

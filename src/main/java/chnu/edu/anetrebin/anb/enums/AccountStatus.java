@@ -1,5 +1,15 @@
 package chnu.edu.anetrebin.anb.enums;
 
+import lombok.Getter;
+
+@Getter
 public enum AccountStatus {
-    ACTIVE, BLOCKED, HIDDEN
+    ACTIVE("Active account"),
+    BLOCKED("Blocked account");
+
+    private final String description;
+
+    AccountStatus(String description) {
+        this.description = description;
+    }
 }
