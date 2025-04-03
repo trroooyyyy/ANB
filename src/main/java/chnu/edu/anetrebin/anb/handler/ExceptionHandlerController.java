@@ -1,7 +1,8 @@
 package chnu.edu.anetrebin.anb.handler;
 
 import chnu.edu.anetrebin.anb.dto.responses.ExceptionResponse;
-import chnu.edu.anetrebin.anb.exception.*;
+import chnu.edu.anetrebin.anb.exceptions.user.UserAlreadyExists;
+import chnu.edu.anetrebin.anb.exceptions.user.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;

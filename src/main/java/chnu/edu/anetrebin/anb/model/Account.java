@@ -51,6 +51,8 @@ public class Account {
 
     @PrePersist
     protected void onCreate() {
+        this.balance = BigDecimal.ZERO;
+        this.accountStatus = AccountStatus.ACTIVE;
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
     }

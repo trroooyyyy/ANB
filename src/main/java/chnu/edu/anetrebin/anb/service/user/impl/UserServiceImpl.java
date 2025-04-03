@@ -1,18 +1,22 @@
 package chnu.edu.anetrebin.anb.service.user.impl;
 
+import chnu.edu.anetrebin.anb.dto.requests.AccountRequest;
 import chnu.edu.anetrebin.anb.dto.requests.UserRequest;
 import chnu.edu.anetrebin.anb.dto.responses.UserResponse;
-import chnu.edu.anetrebin.anb.enums.UserStatus;
-import chnu.edu.anetrebin.anb.enums.Role;
-import chnu.edu.anetrebin.anb.exception.UserNotFoundException;
-import chnu.edu.anetrebin.anb.exception.UserAlreadyExists;
+import chnu.edu.anetrebin.anb.enums.Currency;
+import chnu.edu.anetrebin.anb.exceptions.account.AccountCreationException;
+import chnu.edu.anetrebin.anb.exceptions.user.UserNotFoundException;
+import chnu.edu.anetrebin.anb.exceptions.user.UserAlreadyExists;
+import chnu.edu.anetrebin.anb.model.Account;
 import chnu.edu.anetrebin.anb.model.User;
+import chnu.edu.anetrebin.anb.repository.AccountRepository;
 import chnu.edu.anetrebin.anb.repository.UserRepository;
 import chnu.edu.anetrebin.anb.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.SecureRandom;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,6 +24,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository repository;
+    private final AccountRepository accountRepository;
+    private static final SecureRandom SECURE_RANDOM = new SecureRandom();
+    private static final String ACCOUNT_NUMBER_FORMAT = "%s%010d";
 
     @Transactional
     @Override
@@ -39,8 +46,6 @@ public class UserServiceImpl implements UserService {
         User user = User.builder()
                 .login(userRequest.login())
                 .password(userRequest.password())
-                .role(Role.CUSTOMER)
-                .userStatus(UserStatus.ACTIVE)
                 .name(userRequest.name())
                 .surname(userRequest.surname())
                 .dateOfBirth(userRequest.dateOfBirth())
@@ -96,5 +101,35 @@ public class UserServiceImpl implements UserService {
     public void deleteUser(Long id) {
         User user = repository.findById(id).orElseThrow(() -> new UserNotFoundException("User not found with id: " + id));
         repository.delete(user);
+    }
+
+    @Transactional
+    public void createAccount(Long userId, AccountRequest request) {
+        User user = repository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found with id: " + userId));
+
+        String accountNumber;
+        int attempts = 0;
+        do {
+            accountNumber = generateAccountNumber(request.currency());
+            if (++attempts > 5) {
+                throw new AccountCreationException("Failed to generate unique account number");
+            }
+        } while (accountRepository.existsByAccountNumber(accountNumber));
+
+        Account account = Account.builder()
+                .accountName(request.accountName())
+                .accountNumber(accountNumber)
+                .currency(request.currency())
+                .user(user)
+                .build();
+
+        user.addAccount(account);
+        accountRepository.save(account);
+    }
+
+    private static String generateAccountNumber(Currency currency) {
+        long accountNum = 1_000_000_000L + SECURE_RANDOM.nextLong(9_000_000_000L);
+        return String.format(ACCOUNT_NUMBER_FORMAT, currency.getCode(), accountNum);
     }
 }

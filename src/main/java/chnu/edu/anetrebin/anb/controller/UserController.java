@@ -1,8 +1,9 @@
 package chnu.edu.anetrebin.anb.controller;
 
+import chnu.edu.anetrebin.anb.dto.requests.AccountRequest;
 import chnu.edu.anetrebin.anb.dto.requests.UserRequest;
-import chnu.edu.anetrebin.anb.service.user.UserService;
 import chnu.edu.anetrebin.anb.dto.responses.UserResponse;
+import chnu.edu.anetrebin.anb.service.user.impl.UserServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,7 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Validated
 public class UserController {
-    private final UserService service;
+    private final UserServiceImpl service;
 
     @GetMapping("/")
     public ResponseEntity<List<UserResponse>> getAllUsers() {
@@ -44,5 +45,11 @@ public class UserController {
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         service.deleteUser(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/createAccount/{userId}")
+    public ResponseEntity<Void> createAccount(@PathVariable Long userId, @RequestBody @Valid AccountRequest accountRequest) {
+        service.createAccount(userId, accountRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }

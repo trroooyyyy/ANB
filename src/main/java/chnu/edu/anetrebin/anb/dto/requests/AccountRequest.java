@@ -9,7 +9,6 @@ public record AccountRequest(
         @Size(min = 1, max = 20, message = "Account name should contain from 1 to 20 symbols")
         String accountName,
 
-        @NotNull
+        @NotNull(message = "Account currency cannot be null")
         Currency currency
-) {
-}
+) {}
