@@ -45,7 +45,7 @@ public class TransactionServiceImpl implements TransactionService {
 
         transaction = transactionRepository.save(transaction);
         try {
-            processTransaction(transaction, sender, receiver, transactionRequest.amount());
+            processTransaction(sender, receiver, transactionRequest.amount());
 
             transaction.setStatus(TransactionStatus.COMPLETED);
             transactionRepository.save(transaction);
@@ -77,7 +77,7 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Transactional
-    protected void processTransaction(Transaction transaction, Account sender, Account receiver, BigDecimal amount) {
+    protected void processTransaction(Account sender, Account receiver, BigDecimal amount) {
         sender.setBalance(sender.getBalance().subtract(amount));
         receiver.setBalance(receiver.getBalance().add(amount));
 
