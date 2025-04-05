@@ -34,7 +34,7 @@ public class GlobalExceptionHandler {
             message = "Invalid date format. Date must be in the format yyyy-MM-dd";
         }
 
-        if(ex.getMessage() != null && ex.getMessage().contains("JSON parse error")) {
+        if (ex.getMessage() != null && ex.getMessage().contains("JSON parse error")) { // Don't flexibly, change
             message = "Invalid currency format. Currency must be EUR, UAH or USD";
         }
 

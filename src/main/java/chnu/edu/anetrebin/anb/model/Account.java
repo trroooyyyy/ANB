@@ -54,10 +54,10 @@ public class Account {
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
-    @OneToMany(mappedBy = "senderAccount", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "senderAccount", fetch = FetchType.LAZY)
     private List<Transaction> sentTransactions;
 
-    @OneToMany(mappedBy = "receiverAccount", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "receiverAccount", fetch = FetchType.LAZY)
     private List<Transaction> receivedTransactions;
 
     @PrePersist
@@ -76,13 +76,5 @@ public class Account {
     public static String generateAccountNumber(Currency currency) {
         long accountNum = 1_000_000_000L + SECURE_RANDOM.nextLong(9_000_000_000L);
         return String.format(ACCOUNT_NUMBER_FORMAT, currency.getCode(), accountNum);
-    }
-
-    public void addTransactionToSent(Transaction transaction) {
-        this.sentTransactions.add(transaction);
-    }
-
-    public void addTransactionToReceived(Transaction transaction) {
-        this.receivedTransactions.add(transaction);
     }
 }

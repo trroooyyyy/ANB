@@ -43,6 +43,7 @@ public class TransactionServiceImpl implements TransactionService {
                 .description(transactionRequest.description())
                 .build();
 
+        transaction = transactionRepository.save(transaction);
         try {
             processTransaction(transaction, sender, receiver, transactionRequest.amount());
 
@@ -57,7 +58,7 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     private void validateTransaction(Account sender, Account receiver, BigDecimal amount) {
-        if (sender.getAccountStatus().isActive() || receiver.getAccountStatus().isActive()) {
+        if (!sender.getAccountStatus().isActive() || !receiver.getAccountStatus().isActive()) {
             throw new TransactionException("One of the accounts is not active");
         }
 
@@ -79,9 +80,6 @@ public class TransactionServiceImpl implements TransactionService {
     protected void processTransaction(Transaction transaction, Account sender, Account receiver, BigDecimal amount) {
         sender.setBalance(sender.getBalance().subtract(amount));
         receiver.setBalance(receiver.getBalance().add(amount));
-
-        sender.addTransactionToSent(transaction);
-        receiver.addTransactionToReceived(transaction);
 
         accountRepository.save(sender);
         accountRepository.save(receiver);

@@ -14,13 +14,13 @@ import static chnu.edu.anetrebin.anb.handler.ResponseBuilder.constructResponseEn
 public class AccountExceptionHandler {
     @ExceptionHandler(AccountCreationException.class)
     @ResponseStatus(value = HttpStatus.CONFLICT)
-    public ResponseEntity<Object> handleAccountCreationException(AccountCreationException e) {
+    protected ResponseEntity<Object> handleAccountCreationException(AccountCreationException e) {
         return constructResponseEntity(HttpStatus.CONFLICT, e.getMessage());
     }
 
     @ExceptionHandler(AccountNotFoundException.class)
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
-    public ResponseEntity<Object> handleAccountNotFoundException(AccountNotFoundException e) {
+    protected ResponseEntity<Object> handleAccountNotFoundException(AccountNotFoundException e) {
         return constructResponseEntity(HttpStatus.NOT_FOUND, e.getMessage());
     }
 }

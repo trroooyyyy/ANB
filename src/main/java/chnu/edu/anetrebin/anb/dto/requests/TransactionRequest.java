@@ -20,7 +20,7 @@ public record TransactionRequest(
         @NotNull(message = "Amount is required")
         BigDecimal amount,
 
-        @NotNull(message = "Account name cannot be null")
-        @Size(min = 1, max = 50, message = "Account name should contain from 1 to 50 symbols")
+        @NotNull(message = "Description cannot be null")
+        @Size(min = 1, max = 50, message = "Description should contain from 1 to 50 symbols")
         String description
 ) {}
