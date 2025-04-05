@@ -9,6 +9,7 @@ import lombok.*;
 import java.math.BigDecimal;
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "accounts")
@@ -53,6 +54,12 @@ public class Account {
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
+    @OneToMany(mappedBy = "senderAccount", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Transaction> sentTransactions;
+
+    @OneToMany(mappedBy = "receiverAccount", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Transaction> receivedTransactions;
+
     @PrePersist
     protected void onCreate() {
         this.balance = BigDecimal.ZERO;
@@ -69,5 +76,13 @@ public class Account {
     public static String generateAccountNumber(Currency currency) {
         long accountNum = 1_000_000_000L + SECURE_RANDOM.nextLong(9_000_000_000L);
         return String.format(ACCOUNT_NUMBER_FORMAT, currency.getCode(), accountNum);
+    }
+
+    public void addTransactionToSent(Transaction transaction) {
+        this.sentTransactions.add(transaction);
+    }
+
+    public void addTransactionToReceived(Transaction transaction) {
+        this.receivedTransactions.add(transaction);
     }
 }

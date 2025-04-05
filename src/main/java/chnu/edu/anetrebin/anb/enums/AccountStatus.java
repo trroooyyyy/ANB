@@ -12,4 +12,8 @@ public enum AccountStatus {
     AccountStatus(String description) {
         this.description = description;
     }
+
+    public boolean isActive() {
+        return this == ACTIVE;
+    }
 }

@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 public class AccountServiceImpl implements AccountService {
     private final AccountRepository repository;
 
+    @Transactional
     @Override
     public void deleteAccount(Long id) {
         Account account = repository.findById(id).orElseThrow(() -> new AccountNotFoundException("Account not found with id: " + id));
@@ -35,13 +36,16 @@ public class AccountServiceImpl implements AccountService {
     public AccountResponse updateAccount(Long id, AccountRequest accountRequest) {
         Account account = repository.findById(id).orElseThrow(() -> new AccountNotFoundException("Account not found with id: " + id));
 
+        if (!account.getCurrency().equals(accountRequest.currency())) { // THIS WILL BE CHANGED
+            throw new AccountNotFoundException("Currencies don't match");
+        }
+
         account.setAccountName(accountRequest.accountName());
         account.setCurrency(accountRequest.currency());
 
         // TODO: If currency has changed - request for CurrencyExchange
         // TODO: If currency has changed - change accountNumber
         return AccountResponse.toResponse(repository.save(account));
-
     }
 
     @Transactional(readOnly = true)
