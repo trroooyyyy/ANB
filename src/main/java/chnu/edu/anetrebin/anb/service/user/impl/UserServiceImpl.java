@@ -3,7 +3,6 @@ package chnu.edu.anetrebin.anb.service.user.impl;
 import chnu.edu.anetrebin.anb.dto.requests.AccountRequest;
 import chnu.edu.anetrebin.anb.dto.requests.UserRequest;
 import chnu.edu.anetrebin.anb.dto.responses.UserResponse;
-import chnu.edu.anetrebin.anb.enums.Currency;
 import chnu.edu.anetrebin.anb.exceptions.account.AccountCreationException;
 import chnu.edu.anetrebin.anb.exceptions.user.UserNotFoundException;
 import chnu.edu.anetrebin.anb.exceptions.user.UserAlreadyExists;
@@ -16,17 +15,16 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.security.SecureRandom;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static chnu.edu.anetrebin.anb.model.Account.generateAccountNumber;
 
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository repository;
     private final AccountRepository accountRepository;
-    private static final SecureRandom SECURE_RANDOM = new SecureRandom();
-    private static final String ACCOUNT_NUMBER_FORMAT = "%s%010d";
 
     @Transactional
     @Override
@@ -126,10 +124,5 @@ public class UserServiceImpl implements UserService {
 
         user.addAccount(account);
         accountRepository.save(account);
-    }
-
-    private static String generateAccountNumber(Currency currency) {
-        long accountNum = 1_000_000_000L + SECURE_RANDOM.nextLong(9_000_000_000L);
-        return String.format(ACCOUNT_NUMBER_FORMAT, currency.getCode(), accountNum);
     }
 }

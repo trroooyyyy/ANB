@@ -39,6 +39,7 @@ public class AccountServiceImpl implements AccountService {
         account.setCurrency(accountRequest.currency());
 
         // TODO: If currency has changed - request for CurrencyExchange
+        // TODO: If currency has changed - change accountNumber
         return AccountResponse.toResponse(repository.save(account));
 
     }

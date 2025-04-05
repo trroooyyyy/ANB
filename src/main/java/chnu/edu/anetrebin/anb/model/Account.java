@@ -7,6 +7,7 @@ import jakarta.validation.constraints.DecimalMin;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.security.SecureRandom;
 import java.time.LocalDateTime;
 
 @Entity
@@ -17,6 +18,9 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class Account {
+    private static final SecureRandom SECURE_RANDOM = new SecureRandom();
+    private static final String ACCOUNT_NUMBER_FORMAT = "%s%010d";
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -60,5 +64,10 @@ public class Account {
     @PreUpdate
     protected void onUpdate() {
         this.updatedAt = LocalDateTime.now();
+    }
+
+    public static String generateAccountNumber(Currency currency) {
+        long accountNum = 1_000_000_000L + SECURE_RANDOM.nextLong(9_000_000_000L);
+        return String.format(ACCOUNT_NUMBER_FORMAT, currency.getCode(), accountNum);
     }
 }
