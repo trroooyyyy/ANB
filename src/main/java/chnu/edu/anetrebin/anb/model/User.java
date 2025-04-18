@@ -54,6 +54,9 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Account> accounts;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Card> cards;
+
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
@@ -65,6 +68,7 @@ public class User {
         this.role = Role.CUSTOMER;
         this.userStatus = UserStatus.ACTIVE;
         this.accounts = new ArrayList<>();
+        this.cards = new ArrayList<>();
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
     }
@@ -76,5 +80,9 @@ public class User {
 
     public void addAccount(Account account) {
         accounts.add(account);
+    }
+
+    public void addCard(Card card) {
+        cards.add(card);
     }
 }

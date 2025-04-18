@@ -1,14 +1,18 @@
 package chnu.edu.anetrebin.anb.service.user.impl;
 
 import chnu.edu.anetrebin.anb.dto.requests.AccountRequest;
+import chnu.edu.anetrebin.anb.dto.requests.CardRequest;
 import chnu.edu.anetrebin.anb.dto.requests.UserRequest;
 import chnu.edu.anetrebin.anb.dto.responses.UserResponse;
 import chnu.edu.anetrebin.anb.exceptions.account.AccountCreationException;
+import chnu.edu.anetrebin.anb.exceptions.card.CardAlreadyExists;
 import chnu.edu.anetrebin.anb.exceptions.user.UserNotFoundException;
 import chnu.edu.anetrebin.anb.exceptions.user.UserAlreadyExists;
 import chnu.edu.anetrebin.anb.model.Account;
+import chnu.edu.anetrebin.anb.model.Card;
 import chnu.edu.anetrebin.anb.model.User;
 import chnu.edu.anetrebin.anb.repository.AccountRepository;
+import chnu.edu.anetrebin.anb.repository.CardRepository;
 import chnu.edu.anetrebin.anb.repository.UserRepository;
 import chnu.edu.anetrebin.anb.service.user.UserService;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +29,7 @@ import static chnu.edu.anetrebin.anb.model.Account.generateAccountNumber;
 public class UserServiceImpl implements UserService {
     private final UserRepository repository;
     private final AccountRepository accountRepository;
+    private final CardRepository cardRepository;
 
     @Transactional
     @Override
@@ -124,5 +129,26 @@ public class UserServiceImpl implements UserService {
 
         user.addAccount(account);
         accountRepository.save(account);
+    }
+
+    @Transactional
+    public void addCard(Long userId, CardRequest request) {
+        if (request.expiryDate() != null && cardRepository.existsByCardNumber(request.cardNumber())) {
+            throw new CardAlreadyExists("Card number already exists.");
+        }
+
+
+        User user = repository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found with id: " + userId));
+
+        Card card = Card.builder()
+                .cardNumber(request.cardNumber())
+                .expiryDate(request.expiryDate())
+                .cvv(request.cvv())
+                .user(user).build();
+
+        user.addCard(card);
+        cardRepository.save(card);
+
     }
 }

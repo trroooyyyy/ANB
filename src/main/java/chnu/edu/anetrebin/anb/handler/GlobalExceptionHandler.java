@@ -34,8 +34,17 @@ public class GlobalExceptionHandler {
             message = "Invalid date format. Date must be in the format yyyy-MM-dd";
         }
 
-        if (ex.getMessage() != null && ex.getMessage().contains("JSON parse error")) { // Don't flexibly, change
+        // TODO: Handle it in another way, because it triggers by json parse error
+        if (ex.getMessage() != null && ex.getMessage().contains("Enum")) { // Don't flexibly, change
             message = "Invalid currency format. Currency must be EUR, UAH or USD";
+        }
+
+        if (ex.getMessage() != null && ex.getMessage().contains("YearMonth")) { // Don't flexibly, change
+            message = "Expiry date must be in the format yyyy-MM";
+        }
+
+        if (ex.getMessage() != null && ex.getMessage().contains("JSON parse error")) { // Don't flexibly, change
+            message = "CVV must be entered and be a number";
         }
 
         return constructResponseEntity(HttpStatus.BAD_REQUEST, message);

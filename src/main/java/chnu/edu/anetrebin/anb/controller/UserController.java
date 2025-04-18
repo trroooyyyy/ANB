@@ -1,6 +1,7 @@
 package chnu.edu.anetrebin.anb.controller;
 
 import chnu.edu.anetrebin.anb.dto.requests.AccountRequest;
+import chnu.edu.anetrebin.anb.dto.requests.CardRequest;
 import chnu.edu.anetrebin.anb.dto.requests.UserRequest;
 import chnu.edu.anetrebin.anb.dto.responses.UserResponse;
 import chnu.edu.anetrebin.anb.service.user.impl.UserServiceImpl;
@@ -50,6 +51,12 @@ public class UserController {
     @PostMapping("/createAccount/{userId}")
     public ResponseEntity<Void> createAccount(@PathVariable Long userId, @RequestBody @Valid AccountRequest accountRequest) {
         service.createAccount(userId, accountRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @PostMapping("/addCard/{userId}")
+    public ResponseEntity<Void> addCard(@PathVariable Long userId, @RequestBody @Valid CardRequest cardRequest) {
+        service.addCard(userId, cardRequest);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }
