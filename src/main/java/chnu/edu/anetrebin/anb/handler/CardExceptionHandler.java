@@ -1,6 +1,7 @@
 package chnu.edu.anetrebin.anb.handler;
 
 import chnu.edu.anetrebin.anb.exceptions.card.CardAlreadyExists;
+import chnu.edu.anetrebin.anb.exceptions.card.CardNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -17,4 +18,9 @@ public class CardExceptionHandler {
         return constructResponseEntity(HttpStatus.CONFLICT, e.getMessage());
     }
 
+    @ExceptionHandler(CardNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    protected ResponseEntity<Object> handleCardNotFound(CardNotFoundException e) {
+        return constructResponseEntity(HttpStatus.NOT_FOUND, e.getMessage());
+    }
 }

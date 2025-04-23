@@ -45,6 +45,7 @@ public class AccountServiceImpl implements AccountService {
 
         // TODO: If currency has changed - request for CurrencyExchange
         // TODO: If currency has changed - change accountNumber
+        // TODO: Create Notifications
         return AccountResponse.toResponse(repository.save(account));
     }
 

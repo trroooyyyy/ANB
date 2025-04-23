@@ -133,7 +133,7 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     public void addCard(Long userId, CardRequest request) {
-        if (request.expiryDate() != null && cardRepository.existsByCardNumber(request.cardNumber())) {
+        if (request.cardNumber() != null && cardRepository.existsByCardNumber(request.cardNumber())) {
             throw new CardAlreadyExists("Card number already exists.");
         }
 
