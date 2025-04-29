@@ -43,9 +43,9 @@ public class GlobalExceptionHandler {
             message = "Expiry date must be in the format yyyy-MM";
         }
 
-        if (ex.getMessage() != null && ex.getMessage().contains("JSON parse error")) { // Don't flexibly, change
-            message = "CVV must be entered and be a number";
-        }
+//        if (ex.getMessage() != null && ex.getMessage().contains("JSON parse error")) { // Don't flexibly, change
+//            message = "CVV must be entered and be a number";
+//        }
 
         return constructResponseEntity(HttpStatus.BAD_REQUEST, message);
     }
